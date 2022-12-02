@@ -1,0 +1,56 @@
+name: build_all
+
+on:
+  workflow_dispatch:
+    inputs:
+      time:
+        description: 'interval'
+        required: true
+  schedule:
+    # run at 0:30 every day
+    - cron: '30 0 * * *'
+
+jobs:
+  frp:
+    name: Build frp
+    runs-on: ubuntu-latest
+    outputs:
+      update: ${{steps.check_frp.outputs.update}}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get input
+        run: echo "time=${{ inputs.time }}" >> $GITHUB_ENV
+      
+      - name: Check version
+        id: check_frp
+        run: |
+          python3 main.py --repo frp
+          ls -l
+          ls ./frp -l
+      
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/amd64
+      
+      - name: Login dockerhub
+        if: ${{ env.update == 'true' }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        if: ${{ success() && (env.update == 'true') }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./frp
+          push: true
+          tags: maxiaowei/frp:latest,maxiaowei/frp:${{ env.frp_version }}
+
+
+      
+
