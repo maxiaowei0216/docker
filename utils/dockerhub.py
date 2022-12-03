@@ -1,8 +1,25 @@
 import argparse
 import json
 import os
+import subprocess
 
 import requests
+
+
+def check_file_update(path: str):
+    try:
+        r = subprocess.run(['git', 'log', path], capture_output=True, text=True, check=True)
+        last_file_commit = r.stdout.splitlines()[0].split(' ')[1]
+        r = subprocess.run(['git', 'log', path], capture_output=True, text=True, check=True)
+        current_commit = r.stdout.splitlines()[0].split(' ')[1]
+        if current_commit == last_file_commit:
+            print(f'{path} has been updated.')
+            return True
+        print(f'{path} has NOT been updated.')
+        return False
+    except subprocess.CalledProcessError:
+        print('Check file update failed.')
+        return True
 
 
 def login(user: str, pwd: str):
@@ -41,14 +58,19 @@ def main():
     parser.add_argument('-p', '--path')
     args = parser.parse_args()
 
-    username = os.environ.get('HUB_USERNAME', None)
-    password = os.environ.get('HUB_PASSWORD', None)
-    if username and password:
-        token = login(username, password)
-        sync_readme(args.repo, args.path, token)
+    if args.path:
+        if check_file_update(args.path):
+            username = os.environ.get('HUB_USERNAME', None)
+            password = os.environ.get('HUB_PASSWORD', None)
+            if username and password:
+                token = login(username, password)
+                sync_readme(args.repo, args.path, token)
+            else:
+                print("Can't get username and password from environment variables.")
+                exit(-1)
     else:
-        print("Can't get username and password from environment variables.")
-        exit(-1)
+        print('Please set the path of file to sync')
+
 
 if __name__ == '__main__':
     main()
