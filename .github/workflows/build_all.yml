@@ -14,8 +14,6 @@ jobs:
   frp:
     name: Build frp
     runs-on: ubuntu-latest
-    outputs:
-      update: ${{steps.check_frp.outputs.update}}
 
     steps:
       - name: Checkout repository
@@ -52,7 +50,6 @@ jobs:
           tags: maxiaowei/frp:latest,maxiaowei/frp:${{ env.frp_version }}
       
       - name: Sync readme file
-        if: ${{ success() }}
         env:
           HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           HUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
