@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://github.com/fatedier/frp/releases
+HostUrl=https://objects.githubusercontent.com/github-production-release-asset-2e65be/48378947/af1a98e3-054e-43a8-a749-df27c70a51e3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20221119%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221119T092822Z&X-Amz-Expires=300&X-Amz-Signature=0f0e3d3f7e0472745b0505f894c52ea4f884892216ab28f45559b70b8b378fdc&X-Amz-SignedHeaders=host&actor_id=19872483&key_id=0&repo_id=48378947&response-content-disposition=attachment%3B%20filename%3Dfrp_0.45.0_linux_amd64.tar.gz&response-content-type=application%2Foctet-stream
