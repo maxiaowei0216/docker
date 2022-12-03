@@ -12,7 +12,8 @@ def set_env(k, v):
 
 def handle_frp():
     frp = Release('fatedier/frp', r'[vV]\d+.\d+.\d+')
-    time = int(os.environ.get('time', 24))
+    time = os.environ.get('time', '')
+    time = int(time) if len(time) > 0 else 24
     if frp.is_need_update(time):
         frp.download_file(['linux_amd64'], os.path.join(os.getcwd(), 'frp'))
         set_env('frp_version', frp.version[1:])
