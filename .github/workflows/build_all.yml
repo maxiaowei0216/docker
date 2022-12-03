@@ -50,6 +50,13 @@ jobs:
           context: ./frp
           push: true
           tags: maxiaowei/frp:latest,maxiaowei/frp:${{ env.frp_version }}
+      
+      - name: Sync readme file
+        if: ${{ success() }}
+        env:
+          HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          HUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: python3 utils/dockerhub.py -r "maxiaowei/frp" -p ./frp/README.md
 
 
       
