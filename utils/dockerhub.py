@@ -10,7 +10,7 @@ def check_file_update(path: str):
     try:
         r = subprocess.run(['git', 'log', path], capture_output=True, text=True, check=True)
         last_file_commit = r.stdout.splitlines()[0].split(' ')[1]
-        r = subprocess.run(['git', 'log', path], capture_output=True, text=True, check=True)
+        r = subprocess.run(['git', 'log'], capture_output=True, text=True, check=True)
         current_commit = r.stdout.splitlines()[0].split(' ')[1]
         if current_commit == last_file_commit:
             print(f'{path} has been updated.')
