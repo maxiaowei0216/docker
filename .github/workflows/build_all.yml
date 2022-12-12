@@ -52,6 +52,11 @@ jobs:
       - name: Push notify
         if: ${{ env.update == 'true' }}
         uses: maxiaowei0216/push-message@v0.1
+        env:
+          QYWX_CORP_ID: ${{ secrets.QYWX_CORP_ID }}
+          QYWX_CORP_SECRET: ${{ secrets.QYWX_CORP_SECRET }}
+          QYWX_AGENT_ID: 1000002
+          QYWX_TO_USER: 'maxiaowei'
         with:
           server: QYWX
           message: frp has updated to V${{ env.frp_version }}
