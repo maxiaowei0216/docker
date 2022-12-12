@@ -49,11 +49,20 @@ jobs:
           push: true
           tags: maxiaowei/frp:latest,maxiaowei/frp:${{ env.frp_version }}
       
+      - name: Push notify
+        if: ${{ env.update == 'true' }}
+        uses: maxiaowei0216/push-message@v0.1
+        with:
+          server: QYWX
+          message: frp has updated to V${{ env.frp_version }}
+      
       - name: Sync readme file
         env:
           HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           HUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
         run: python3 utils/dockerhub.py -r "maxiaowei/frp" -p ./frp/README.md
+        
+      
 
 
       
