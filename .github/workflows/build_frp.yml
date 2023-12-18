@@ -44,22 +44,12 @@ jobs:
         if: ${{ steps.check_frp.outputs.update == 'true' }}
         run: |
           git config user.name ${{ github.actor }}
-          git config user.email maxiaowei0216@gmail.com
+          git config user.email 19872483+maxiaowei0216@users.noreply.github.com
           git add frp/README.md
-          git commit -m "frp updates to ${{ steps.check_frp.outputs.version }}"
+          git commit -m "[ci] frp updates to ${{ steps.check_frp.outputs.version }}"
           git push
       
-      - name: Push notify
-        if: ${{ steps.check_frp.outputs.update == 'true' }}
-        uses: maxiaowei0216/push-message@v0.1
-        env:
-          QYWX_CORP_ID: ${{ secrets.QYWX_CORP_ID }}
-          QYWX_CORP_SECRET: ${{ secrets.QYWX_CORP_SECRET }}
-          QYWX_AGENT_ID: 1000002
-          QYWX_TO_USER: 'maxiaowei'
-        with:
-          server: QYWX
-          message: 'frp has updated to ${{ steps.check_frp.outputs.version }}'
+
   
   build:
     name: build frp
@@ -107,7 +97,38 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             frp_version=${{ env.VERSION }}
-        
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [frp, build]
+    permissions:
+      contents: write
+    if: ${{needs.frp.outputs.update == 'true'}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          ref: frp
+      - uses: ncipollo/release-action@v1
+        with:
+          commit: frp
+          tag: frp_v${{needs.frp.outputs.version}}
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [frp, release]
+    if: ${{needs.frp.outputs.update == 'true'}}
+    steps:
+      - name: Push notify
+        uses: maxiaowei0216/push-message@v0.1
+        env:
+          QYWX_CORP_ID: ${{ secrets.QYWX_CORP_ID }}
+          QYWX_CORP_SECRET: ${{ secrets.QYWX_CORP_SECRET }}
+          QYWX_AGENT_ID: 1000002
+          QYWX_TO_USER: 'maxiaowei'
+        with:
+          server: QYWX
+          message: 'frp has updated to ${{ needs.frp.outputs.version }}'
       
 
 
