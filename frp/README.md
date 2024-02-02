@@ -3,7 +3,8 @@
 基于[fatedier/frp](https://github.com/fatedier/frp)的docker镜像，暂仅支持linux/amd64架构。
 
 # Tags
-- 0.53.2, 0.53, latest
+- 0.54.0, 0.54, latest
+- 0.53.2, 0.53
 - 0.53.0
 - 0.52.3, 0.52
 
