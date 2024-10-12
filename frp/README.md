@@ -26,6 +26,7 @@ docker run -d \
     --name=frps \
     --network host \
     -e RUN_MODE=server \
+    -e FRP_CONF_FILE=frps.toml \
     -v /path/to/conf:/frp/conf \
     maxiaowei/frp:latest
 ```
@@ -37,6 +38,7 @@ docker run -d \
     --name=frpc \
     --network host \
     -e RUN_MODE=client \
+    -e FRP_CONF_FILE=frpc.toml \
     -v /path/to/conf:/frp/conf \
     maxiaowei/frp:latest
 ```
@@ -46,4 +48,5 @@ docker run -d \
 | 参数                   | 功能                               |
 |:--------------------:| -------------------------------- |
 | `-e RUN_MODE=server` | 指定运行模式，server对应frps，client对应frpc |
+| `-e FRP_CONF_FILE=<conf file name>` | 指定配置文件的名字 |
 | `-v /frp/conf`       | 配置文件路径                           |

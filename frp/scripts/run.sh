@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
 
-cd /frp/bin
-frps_conf_path=/frp/conf/frps.ini
-frpc_conf_path=/frp/conf/frpc.ini
+CONF_DIR="/frp/conf"
+CONF_FILE=${FRP_CONF_FILE:-"frps.toml"}
+CONF_PATH="$CONF_DIR/$CONF_FILE"
+RUN_MODE=${RUN_MODE:-"server"}
+
+# check conf file
+if [ ! -f "$CONF_PATH" ]; then
+    echo "Configuration file $CONF_PATH not found!"
+    exit 1
+fi
 
 echo "frp version is $FRP_VERSION"
 
-case $RUN_MODE in
-    "server") ./frps -c $frps_conf_path
-    ;;
-    "client") ./frpc -c $frpc_conf_path
-    ;;
-    *) 
-    if [ -f $frps_conf_path ]; then
-        ./frps -c $frps_conf_path
-    elif [-f $frpc_conf_path ]; then
-        ./frpc -c $frpc_conf_path
-    else
-        echo "Please set the running mode of frp with RUN_MODE."
-    fi
-    ;;
-esac
+cd /frp/bin
+
+if [ "$RUN_MODE" = "server" ]; then
+    echo "Running frp server with config: $CONF_PATH"
+    ./frps -c "$CONF_PATH"
+elif [ "$RUN_MODE" = "client" ]; then
+    echo "Running frp client with config: $CONF_PATH"
+    ./frpc -c "$CONF_PATH"
+else
+    echo "Invalid RUN_MODE. Please specify either 'server' or 'client'."
+    exit 1
+fi

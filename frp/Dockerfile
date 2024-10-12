@@ -2,6 +2,7 @@ FROM alpine:latest
 
 ARG frp_version=0.52.3
 ENV FRP_VERSION=$frp_version
+ENV FRP_CONF_FILE="frps.toml"
 
 COPY ./scripts/* /frp/scripts/
 COPY ./frp_${FRP_VERSION}_linux_amd64.tar.gz /frp/

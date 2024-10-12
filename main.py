@@ -10,7 +10,7 @@ def handle_frp():
     frp = Release('fatedier/frp', r'[vV]\d+.\d+.\d+')
     # remove prefix 'v'
     updated = generate_readme(frp.version[1:], os.path.join(cur_path, 'frp', 'README.md'))
-    if updated:
+    if True: # always download file
         print(f'frp will update to {frp.version[1:]}')
         frp.download_file(['linux_amd64'], os.path.join(cur_path, 'frp'), set_out=True)
         set_output('version', frp.version[1:])
